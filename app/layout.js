@@ -1,4 +1,6 @@
 import "./globals.css";
+import Header from "./_components/Header";
+import Footer from "./_components/Footer";
 
 export const metadata = {
   title: "GameDB",
@@ -8,7 +10,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className="min-h-screen bg-slate-800 flex flex-col text-white">
+        <Header />
+        <main className="flex-grow p-4">{children}</main>
+        <Footer />
+      </body>
     </html>
   );
 }
