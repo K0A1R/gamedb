@@ -2,11 +2,13 @@
 import { useState, useEffect } from "react";
 
 import GameCard from "../components/game-card";
+import useStores from "../../_hooks/useStores";
 
 export default function Page() {
   const [gamesUnderTwenty, setGamesUnderTwenty] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { stores, loading: storesLoading, error: storesError } = useStores();
 
   useEffect(() => {
     const fetchGamesUnderTwenty = async () => {
@@ -26,8 +28,15 @@ export default function Page() {
     fetchGamesUnderTwenty();
   }, []);
 
-  if (loading) return <p>Loading games under $20...</p>;
+  // Find store name by storeID
+  const getStoreName = (storeID) => {
+    const store = stores.find((store) => store.storeID === storeID);
+    return store ? store.storeName : "Unknown Store";
+  };
+
+  if (loading || storesLoading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
+  if (storesError) return <p>Error loading stores: {storesError}</p>;
 
   return (
     <div>
@@ -35,7 +44,7 @@ export default function Page() {
       <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
         {gamesUnderTwenty.map((game) => (
           <GameCard
-            key={game.gameID + game.dealID}
+            key={`${game.gameID}-${game.dealID}`}
             game={{
               gameID: game.gameID,
               name: game.title,
@@ -48,6 +57,7 @@ export default function Page() {
               steamRatingPercent: game.steamRatingPercent,
               steamRatingCount: game.steamRatingCount,
               metacriticScore: game.metacriticScore,
+              store: getStoreName(game.storeID),
               isSaved: false,
             }}
           />

@@ -5,7 +5,8 @@ export default function GameCard({ game }) {
       <h2 className="font-semibold text-slate-200">{game.name}</h2>
       <p>Price: ${game.normalPrice}</p>
       <p>
-        Sale Price: <span className="text-red-500">${game.salePrice}</span>
+        Sale Price:{" "}
+        <span className="text-red-500 font-semibold">${game.salePrice}</span>
       </p>
 
       {/* Steam Rating */}
@@ -25,6 +26,12 @@ export default function GameCard({ game }) {
         <p>Metacritic Score: {game.metacriticScore}</p>
       )}
 
+      {/* Store Name */}
+      <p>
+        Store: <span className="text-red-500 font-semibold">{game.store}</span>
+      </p>
+
+      {/* Favorite Button */}
       <button className="hover:cursor-pointer">
         {game.isSaved ? "♥ Unfavorite" : "♡ Favorite"}
       </button>
