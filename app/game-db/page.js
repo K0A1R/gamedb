@@ -38,8 +38,7 @@ export default function Home() {
   return (
     <div className="p-4 bg-gray-900 text-white">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-2xl font-bold mb-6">Game Search</h1>
-
+        <h1 className="text-2xl font-bold mb-6">Search for Games</h1>
         <form onSubmit={handleSearch} className="mb-8">
           <div className="flex gap-2">
             <input
@@ -52,10 +51,16 @@ export default function Home() {
             />
             <button
               type="submit"
-              className="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded disabled:opacity-50"
+              className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-medium disabled:opacity-50 transition-colors"
               disabled={loading || !searchTerm.trim()}
             >
-              {loading ? "Searching..." : "Search"}
+              {loading ? (
+                <span className="flex items-center gap-2">
+                  <span className="animate-spin">↻</span> Searching...
+                </span>
+              ) : (
+                "Search"
+              )}
             </button>
           </div>
         </form>
@@ -89,11 +94,17 @@ export default function Home() {
                     <p className="text-gray-300 mb-1">
                       Cheapest Price: ${game.cheapest}
                     </p>
-                    <p className="text-sm text-gray-400">
-                      {game.cheapestDealID
-                        ? `Deal available`
-                        : `No current deals`}
-                    </p>
+                    <a
+                      href={`https://www.cheapshark.com/redirect?dealID=${game.cheapestDealID}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <p className="text-sm text-gray-400 hover:text-blue-400 hover:underline">
+                        {game.cheapestDealID
+                          ? `Deal available`
+                          : `No current deals`}
+                      </p>
+                    </a>
                   </div>
                 </div>
               ))}
