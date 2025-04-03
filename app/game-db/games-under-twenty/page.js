@@ -1,14 +1,17 @@
 "use client";
 import { useState, useEffect } from "react";
+import Link from "next/link";
 
 import GameCard from "../components/game-card";
 import useStores from "../../_hooks/useStores";
+import { useUserAuth } from "../../_utils/auth-context";
 
 export default function Page() {
   const [gamesUnderTwenty, setGamesUnderTwenty] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { stores, loading: storesLoading, error: storesError } = useStores();
+  const { user } = useUserAuth();
 
   useEffect(() => {
     const fetchGamesUnderTwenty = async () => {
@@ -33,6 +36,15 @@ export default function Page() {
     const store = stores.find((store) => store.storeID === storeID);
     return store ? store.storeName : "Unknown Store";
   };
+
+  if (!user) {
+    return (
+      <div className="flex flex-col items-center text-gray-200">
+        <h1 className="text-6xl mb-5">Welcome to GameDB</h1>
+        <h2 className="text-xl">Please Sign In to Continue</h2>
+      </div>
+    );
+  }
 
   if (loading || storesLoading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;

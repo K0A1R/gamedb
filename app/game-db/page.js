@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useUserAuth } from "../_utils/auth-context";
+import Link from "next/link";
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -8,7 +9,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [hasSearched, setHasSearched] = useState(false);
-  const { user, gitHubSignIn, firebaseSignOut } = useUserAuth();
+  const { user } = useUserAuth();
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -39,22 +40,15 @@ export default function Home() {
 
   if (!user) {
     return (
-      <main className="flex flex-col h-screen justify-center items-center">
-        <h1 className="text-6xl text-slate-800 font-semibold mb-10">
-          Sign-In to view your shopping list!
-        </h1>
-        <button
-          className="hover:underline hover:text-green-500 font-semibold"
-          onClick={gitHubSignIn}
-        >
-          Sign-In
-        </button>
-      </main>
+      <div className="flex flex-col items-center text-gray-200">
+        <h1 className="text-6xl mb-5">Welcome to GameDB</h1>
+        <h2 className="text-xl">Please Sign In to Continue</h2>
+      </div>
     );
   }
 
   return (
-    <div className="p-4 bg-gray-900 text-white">
+    <div className="p-4 bg-gray-900">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-2xl font-bold mb-6">Search for Games</h1>
         <form onSubmit={handleSearch} className="mb-8">
