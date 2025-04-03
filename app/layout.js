@@ -1,6 +1,4 @@
 import "./globals.css";
-import Header from "./_components/Header";
-import Footer from "./_components/Footer";
 
 import { AuthContextProvider } from "./_utils/auth-context";
 
@@ -12,11 +10,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-slate-800 flex flex-col text-white">
+      <body className="min-h-screen bg-slate-800">
         <AuthContextProvider>
-          <Header />
-          <main className="flex-grow p-4">{children}</main>
-          <Footer />
+          <main>{children}</main>
         </AuthContextProvider>
       </body>
     </html>

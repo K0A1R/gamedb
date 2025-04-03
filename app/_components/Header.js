@@ -1,6 +1,9 @@
+"use client";
 import Link from "next/link";
+import { useUserAuth } from "../_utils/auth-context";
 
 export default function Header() {
+  const { user, gitHubSignIn, firebaseSignOut } = useUserAuth();
   return (
     <header className="flex justify-between bg-gray-900 text-white h-20 rounded-md p-4 shadow-sm">
       <h1 className="text-2xl font-bold">GameDB</h1>
