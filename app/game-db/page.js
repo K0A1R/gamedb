@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useUserAuth } from "../_utils/auth-context";
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -7,6 +8,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [hasSearched, setHasSearched] = useState(false);
+  const { user, gitHubSignIn, firebaseSignOut } = useUserAuth();
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -34,6 +36,22 @@ export default function Home() {
       setLoading(false);
     }
   };
+
+  if (!user) {
+    return (
+      <main className="flex flex-col h-screen justify-center items-center">
+        <h1 className="text-6xl text-slate-800 font-semibold mb-10">
+          Sign-In to view your shopping list!
+        </h1>
+        <button
+          className="hover:underline hover:text-green-500 font-semibold"
+          onClick={gitHubSignIn}
+        >
+          Sign-In
+        </button>
+      </main>
+    );
+  }
 
   return (
     <div className="p-4 bg-gray-900 text-white">
