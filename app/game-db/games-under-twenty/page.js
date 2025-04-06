@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import Link from "next/link";
 
 import GameCard from "../components/game-card";
 import useStores from "../../_hooks/useStores";

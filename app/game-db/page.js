@@ -104,19 +104,26 @@ export default function Home() {
                   <div className="p-4">
                     <h3 className="font-bold text-lg mb-2">{game.external}</h3>
                     <p className="text-gray-300 mb-1">
-                      Cheapest Price: ${game.cheapest}
+                      Cheapest Price:{" "}
+                      <span className="font-semibold text-red-500">
+                        ${game.cheapest}
+                      </span>
                     </p>
                     <a
                       href={`https://www.cheapshark.com/redirect?dealID=${game.cheapestDealID}`}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <p className="text-sm text-gray-400 hover:text-blue-400 hover:underline">
+                      <p className="text-sm text-gray-400 font-semibold hover:text-blue-400 hover:underline">
                         {game.cheapestDealID
-                          ? `Deal available`
+                          ? `Go to deal`
                           : `No current deals`}
                       </p>
                     </a>
+                    {/* Favorite Button */}
+                    <button className="hover:cursor-pointer">
+                      {game.isSaved ? "♥ Unfavorite" : "♡ Favorite"}
+                    </button>
                   </div>
                 </div>
               ))}
