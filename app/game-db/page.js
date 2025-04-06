@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import { useUserAuth } from "../_utils/auth-context";
-import Link from "next/link";
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");

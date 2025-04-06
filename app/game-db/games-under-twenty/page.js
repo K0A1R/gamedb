@@ -1,9 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
-
 import GameCard from "../components/game-card";
 import useStores from "../../_hooks/useStores";
 import { useUserAuth } from "../../_utils/auth-context";
+import { isSaved } from "../../_services/games-services";
 
 export default function Page() {
   const [gamesUnderTwenty, setGamesUnderTwenty] = useState([]);
@@ -15,12 +15,24 @@ export default function Page() {
   useEffect(() => {
     const fetchGamesUnderTwenty = async () => {
       try {
-        const reponse = await fetch(
+        const response = await fetch(
           "https://www.cheapshark.com/api/1.0/deals?upperPrice=20"
         );
-        if (!reponse.ok) throw new Error("Failed to fetch games under 20$");
-        const data = await reponse.json();
-        setGamesUnderTwenty(data);
+        if (!response.ok) throw new Error("Failed to fetch games under 20$");
+        const data = await response.json();
+
+        // Add saved status if user is logged in
+        if (user) {
+          const gamesWithStatus = await Promise.all(
+            data.map(async (game) => ({
+              ...game,
+              isSaved: await isSaved(user.uid, game.gameID),
+            }))
+          );
+          setGamesUnderTwenty(gamesWithStatus);
+        } else {
+          setGamesUnderTwenty(data);
+        }
       } catch (error) {
         setError(error.message);
       } finally {
@@ -28,9 +40,8 @@ export default function Page() {
       }
     };
     fetchGamesUnderTwenty();
-  }, []);
+  }, [user]);
 
-  // Find store name by storeID
   const getStoreName = (storeID) => {
     const store = stores.find((store) => store.storeID === storeID);
     return store ? store.storeName : "Unknown Store";
@@ -69,7 +80,7 @@ export default function Page() {
               steamRatingCount: game.steamRatingCount,
               metacriticScore: game.metacriticScore,
               store: getStoreName(game.storeID),
-              isSaved: false,
+              isSaved: game.isSaved || false,
             }}
           />
         ))}
