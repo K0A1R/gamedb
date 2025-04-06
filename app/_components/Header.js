@@ -26,6 +26,15 @@ export default function Header() {
       <nav className="flex gap-2 items-center">
         {user ? (
           <>
+            <img
+              src={user.photoURL}
+              alt={user.photoURL}
+              height={30}
+              width={30}
+              className="rounded-full"
+            />
+            <p>{user.displayName}</p>
+            <span className="text-gray-400">|</span>
             <Link href="/game-db" className="hover:text-blue-300">
               Home
             </Link>
