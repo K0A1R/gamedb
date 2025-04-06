@@ -50,7 +50,7 @@ export default function Home() {
   return (
     <div className="p-4 bg-gray-900">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-2xl font-bold mb-6">Search for Games</h1>
+        <h1 className="text-2xl font-bold mb-6">Games Lookup</h1>
         <form onSubmit={handleSearch} className="mb-8">
           <div className="flex gap-2">
             <input
