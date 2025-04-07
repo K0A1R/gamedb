@@ -1,65 +1,11 @@
 "use client";
-import { useState, useEffect } from "react";
-import { addGame, deleteGame, isSaved } from "../../_services/games-services";
+import useFavorites from "../../_hooks/useFavorites";
 import { useUserAuth } from "../../_utils/auth-context";
 
 export default function GameCard({ game }) {
   const { user } = useUserAuth();
-  const [isGameSaved, setIsGameSaved] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [error, setError] = useState(null);
-
-  // Check saved status on mount and when user/game/store changes
-  useEffect(() => {
-    const checkSavedStatus = async () => {
-      if (user) {
-        try {
-          const saved = await isSaved(user.uid, game.gameID, game.storeID);
-          setIsGameSaved(saved);
-        } catch (error) {
-          console.error("Error checking saved status:", error);
-        }
-      }
-    };
-    checkSavedStatus();
-  }, [user, game.gameID, game.storeID]);
-
-  // Handle favorite game toggle
-  const handleFavoriteToggle = async () => {
-    if (!user) {
-      setError("Please sign in to save favorites");
-      return;
-    }
-
-    setIsProcessing(true);
-    setError(null);
-
-    try {
-      if (isGameSaved) {
-        await deleteGame(user.uid, game.gameID, game.storeID);
-      } else {
-        await addGame(user.uid, {
-          gameID: game.gameID,
-          name: game.name,
-          gameIMG: game.gameIMG,
-          storeID: game.storeID,
-          dealID: game.dealID,
-          salePrice: game.salePrice,
-          normalPrice: game.normalPrice,
-          steamRatingText: game.steamRatingText,
-          steamRatingPercent: game.steamRatingPercent,
-          steamRatingCount: game.steamRatingCount,
-          metacriticScore: game.metacriticScore,
-          store: game.store,
-        });
-      }
-      setIsGameSaved(!isGameSaved);
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setIsProcessing(false);
-    }
-  };
+  const { isGameSaved, isProcessing, error, handleFavoriteToggle } =
+    useFavorites(game);
 
   // Calculate savings percentage
   const savingsPercentage = game.normalPrice
@@ -78,12 +24,13 @@ export default function GameCard({ game }) {
             "w-full h-48 object-cover mb-3 rounded bg-gray-600";
         }}
       />
+      {/*Game Details*/}
       <div className="flex-grow">
         {/*Game Title*/}
         <h2 className="font-semibold text-slate-200 text-lg mb-2">
           {game.name}
         </h2>
-        {/*Prices*/}
+        {/*Price info*/}
         <div className="space-y-1 mb-3">
           {game.normalPrice && (
             <p className="text-gray-400 line-through">${game.normalPrice}</p>
