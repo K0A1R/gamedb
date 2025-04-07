@@ -1,7 +1,7 @@
 "use client";
 import { useUserAuth } from "../../_utils/auth-context";
-import { getGames } from "../../_services/games-services";
-
+import { db } from "../../_utils/firebase";
+import { collection, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import GameCard from "../components/game-card";
 
@@ -12,19 +12,30 @@ export default function Page() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchFavoriteGames = async () => {
-      if (!user) return;
-      try {
-        const games = await getGames(user.uid);
+    if (!user) {
+      setLoading(false);
+      return;
+    }
+    // Set up real-time listener
+    const gamesRef = collection(db, "users", user.uid, "games");
+    const unsubscribe = onSnapshot(
+      gamesRef,
+      (snapshot) => {
+        const games = snapshot.docs.map((doc) => ({
+          firestoreId: doc.id,
+          ...doc.data(),
+        }));
         setFavoriteGames(games);
-      } catch (error) {
-        console.error("Error fetching favorite games:", error);
-        setError(error.message);
-      } finally {
+        setLoading(false);
+      },
+      (error) => {
+        console.error("Error listening to favorites:", error);
+        setError("Failed to load favorites. Please refresh.");
         setLoading(false);
       }
-    };
-    fetchFavoriteGames();
+    );
+    // Clean up listener on unmount
+    return () => unsubscribe();
   }, [user]);
 
   if (!user) {
