@@ -1,4 +1,3 @@
-// Firestore CRUD
 import { db } from "../_utils/firebase";
 import {
   doc,
@@ -6,60 +5,70 @@ import {
   deleteDoc,
   collection,
   getDocs,
-  getDoc,
+  query,
+  where,
 } from "firebase/firestore";
 
-// Fetch saved games
+// Helper function to find Firestore document ID by gameID
+async function findGameDocId(userId, gameId) {
+  const gamesRef = collection(db, "users", userId, "games");
+  const q = query(gamesRef, where("gameID", "==", gameId));
+  const querySnapshot = await getDocs(q);
+  return querySnapshot.empty ? null : querySnapshot.docs[0].id;
+}
+
+// Fetch all saved games for a user
 export async function getGames(userId) {
   try {
     const games = [];
-    const gamesCollectionRef = collection(db, "users", userId, "games");
-    const gamesCollectionSnapshot = await getDocs(gamesCollectionRef);
-    gamesCollectionSnapshot.forEach((doc) => {
-      games.push({ id: doc.id, ...doc.data() });
+    const gamesRef = collection(db, "users", userId, "games");
+    const snapshot = await getDocs(gamesRef);
+    snapshot.forEach((doc) => {
+      games.push({ firestoreId: doc.id, ...doc.data() });
     });
     return games;
   } catch (error) {
-    console.error("Error fetching games: ", error);
-    return [];
+    console.error("Error fetching games:", error);
+    throw error;
   }
 }
 
 // Save game to favorites
 export async function addGame(userId, game) {
   try {
-    const gamesCollectionRef = collection(db, "users", userId, "games");
-    const docRef = await addDoc(gamesCollectionRef, {
+    const gamesRef = collection(db, "users", userId, "games");
+    const docRef = await addDoc(gamesRef, {
       ...game,
       savedAt: new Date(),
     });
     return docRef.id;
   } catch (error) {
-    console.error("Error adding game: ", error);
-    throw new Error("Failed to save game");
+    console.error("Error adding game:", error);
+    throw error;
   }
 }
 
 // Delete saved game
 export async function deleteGame(userId, gameId) {
   try {
-    const gameDocRef = doc(db, "users", userId, "games", gameId);
-    await deleteDoc(gameDocRef);
+    const docId = await findGameDocId(userId, gameId);
+    if (!docId) throw new Error("Game not found in favorites");
+
+    await deleteDoc(doc(db, "users", userId, "games", docId));
     return true;
   } catch (error) {
-    console.error("Error deleting game: ", error);
-    throw new Error("Failed to remove game");
+    console.error("Error deleting game:", error);
+    throw error;
   }
 }
 
 // Check if game is saved
 export async function isSaved(userId, gameId) {
   try {
-    const docRef = doc(db, "users", userId, "games", gameId);
-    const docSnapshot = await getDoc(docRef);
-    return docSnapshot.exists();
+    const docId = await findGameDocId(userId, gameId);
+    return docId !== null;
   } catch (error) {
-    console.error("Error checking if game is saved: ", error);
+    console.error("Error checking saved status:", error);
     return false;
   }
 }
