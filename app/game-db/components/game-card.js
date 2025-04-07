@@ -67,7 +67,7 @@ export default function GameCard({ game }) {
     : 0;
 
   return (
-    <div className="border border-gray-600 rounded-lg p-4 bg-slate-700 hover:shadow-lg transition-shadow">
+    <div className="border border-gray-600 rounded-lg p-4 bg-slate-700 hover:shadow-lg transition-shadow flex flex-col h-full">
       <img
         src={game.gameIMG}
         alt={game.name}
@@ -78,46 +78,50 @@ export default function GameCard({ game }) {
             "w-full h-48 object-cover mb-3 rounded bg-gray-600";
         }}
       />
-
-      <h2 className="font-semibold text-slate-200 text-lg mb-2">{game.name}</h2>
-
-      <div className="space-y-1 mb-3">
-        {game.normalPrice && (
-          <p className="text-gray-400 line-through">${game.normalPrice}</p>
-        )}
-        <p className="text-xl font-bold text-green-400">${game.salePrice}</p>
-        {savingsPercentage > 0 && (
-          <p className="text-sm text-green-300">Save {savingsPercentage}%</p>
-        )}
-      </div>
-
-      <div className="space-y-2 text-sm">
-        {game.metacriticScore > 0 && (
-          <div className="flex items-center">
-            <span
-              className={`inline-block w-4 h-4 mr-1 rounded-full ${
-                game.metacriticScore >= 75
-                  ? "bg-green-500"
-                  : game.metacriticScore >= 50
-                  ? "bg-yellow-500"
-                  : "bg-red-500"
-              }`}
-            ></span>
-            Metacritic: {game.metacriticScore}
-          </div>
-        )}
-
-        {game.steamRatingPercent > 0 && (
-          <p>
-            Steam: {game.steamRatingPercent}% ({game.steamRatingText})
+      <div className="flex-grow">
+        {/*Game Title*/}
+        <h2 className="font-semibold text-slate-200 text-lg mb-2">
+          {game.name}
+        </h2>
+        {/*Prices*/}
+        <div className="space-y-1 mb-3">
+          {game.normalPrice && (
+            <p className="text-gray-400 line-through">${game.normalPrice}</p>
+          )}
+          <p className="text-xl font-bold text-green-400">${game.salePrice}</p>
+          {savingsPercentage > 0 && (
+            <p className="text-sm text-green-300">Save {savingsPercentage}%</p>
+          )}
+        </div>
+        {/*Metacritic Rating*/}
+        <div className="space-y-2 text-sm">
+          {game.metacriticScore > 0 && (
+            <div className="flex items-center">
+              <span
+                className={`inline-block w-4 h-4 mr-1 rounded-full ${
+                  game.metacriticScore >= 75
+                    ? "bg-green-500"
+                    : game.metacriticScore >= 50
+                    ? "bg-yellow-500"
+                    : "bg-red-500"
+                }`}
+              ></span>
+              Metacritic: {game.metacriticScore}
+            </div>
+          )}
+          {/*Steam Rating*/}
+          {game.steamRatingPercent > 0 && (
+            <p>
+              Steam: {game.steamRatingPercent}% ({game.steamRatingText})
+            </p>
+          )}
+          {/*Store Name*/}
+          <p className="font-medium">
+            Store: <span className="text-blue-300">{game.store}</span>
           </p>
-        )}
-
-        <p className="font-medium">
-          Store: <span className="text-blue-300">{game.store}</span>
-        </p>
+        </div>
       </div>
-
+      {/*Favorite Button*/}
       {user && (
         <button
           onClick={handleFavoriteToggle}
