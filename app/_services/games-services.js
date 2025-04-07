@@ -9,15 +9,19 @@ import {
   where,
 } from "firebase/firestore";
 
-// Helper function to find Firestore document ID by gameID
-async function findGameDocId(userId, gameId) {
+// find Firestore document ID by gameID & storeID
+async function findGameDocId(userId, gameId, storeId) {
   const gamesRef = collection(db, "users", userId, "games");
-  const q = query(gamesRef, where("gameID", "==", gameId));
+  const q = query(
+    gamesRef,
+    where("gameID", "==", gameId),
+    where("storeID", "==", storeId)
+  );
   const querySnapshot = await getDocs(q);
   return querySnapshot.empty ? null : querySnapshot.docs[0].id;
 }
 
-// Fetch all saved games for a user
+// Fetch all saved games for user
 export async function getGames(userId) {
   try {
     const games = [];
@@ -49,11 +53,10 @@ export async function addGame(userId, game) {
 }
 
 // Delete saved game
-export async function deleteGame(userId, gameId) {
+export async function deleteGame(userId, gameId, storeId) {
   try {
-    const docId = await findGameDocId(userId, gameId);
+    const docId = await findGameDocId(userId, gameId, storeId);
     if (!docId) throw new Error("Game not found in favorites");
-
     await deleteDoc(doc(db, "users", userId, "games", docId));
     return true;
   } catch (error) {
@@ -63,9 +66,9 @@ export async function deleteGame(userId, gameId) {
 }
 
 // Check if game is saved
-export async function isSaved(userId, gameId) {
+export async function isSaved(userId, gameId, storeId) {
   try {
-    const docId = await findGameDocId(userId, gameId);
+    const docId = await findGameDocId(userId, gameId, storeId);
     return docId !== null;
   } catch (error) {
     console.error("Error checking saved status:", error);

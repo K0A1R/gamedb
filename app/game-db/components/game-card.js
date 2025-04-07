@@ -9,21 +9,22 @@ export default function GameCard({ game }) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState(null);
 
-  // Check saved status on mount and when user/game changes
+  // Check saved status on mount and when user/game/store changes
   useEffect(() => {
     const checkSavedStatus = async () => {
       if (user) {
         try {
-          const saved = await isSaved(user.uid, game.gameID);
+          const saved = await isSaved(user.uid, game.gameID, game.storeID);
           setIsGameSaved(saved);
-        } catch (err) {
-          console.error("Error checking saved status:", err);
+        } catch (error) {
+          console.error("Error checking saved status:", error);
         }
       }
     };
     checkSavedStatus();
-  }, [user, game.gameID]);
+  }, [user, game.gameID, game.storeID]);
 
+  // Handle favorite game toggle
   const handleFavoriteToggle = async () => {
     if (!user) {
       setError("Please sign in to save favorites");
@@ -35,7 +36,7 @@ export default function GameCard({ game }) {
 
     try {
       if (isGameSaved) {
-        await deleteGame(user.uid, game.gameID);
+        await deleteGame(user.uid, game.gameID, game.storeID);
       } else {
         await addGame(user.uid, {
           gameID: game.gameID,
@@ -53,13 +54,14 @@ export default function GameCard({ game }) {
         });
       }
       setIsGameSaved(!isGameSaved);
-    } catch (err) {
-      setError(err.message);
+    } catch (error) {
+      setError(error.message);
     } finally {
       setIsProcessing(false);
     }
   };
 
+  // Calculate savings percentage
   const savingsPercentage = game.normalPrice
     ? Math.round(((game.normalPrice - game.salePrice) / game.normalPrice) * 100)
     : 0;
