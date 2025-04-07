@@ -5,7 +5,7 @@ import { useUserAuth } from "../../_utils/auth-context";
 
 export default function GameCard({ game }) {
   const { user } = useUserAuth();
-  const [isSavedGame, setIsSavedGame] = useState(game.isSaved);
+  const [isGameSaved, setIsGameSaved] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState(null);
 
@@ -19,28 +19,24 @@ export default function GameCard({ game }) {
     setError(null);
 
     try {
-      if (isSavedGame) {
-        await deleteGame(user.uid, game.gameID);
-      } else {
-        await addGame(user.uid, {
-          gameID: game.gameID,
-          name: game.name,
-          gameIMG: game.gameIMG,
-          storeID: game.storeID,
-          dealID: game.dealID,
-          salePrice: game.salePrice,
-          normalPrice: game.normalPrice,
-          steamRatingText: game.steamRatingText,
-          steamRatingPercent: game.steamRatingPercent,
-          steamRatingCount: game.steamRatingCount,
-          metacriticScore: game.metacriticScore,
-          store: game.store,
-          savedAt: new Date(),
-        });
-      }
-      setIsSavedGame(!isSavedGame);
+      await addGame(user.uid, {
+        gameID: game.gameID,
+        name: game.name,
+        gameIMG: game.gameIMG,
+        storeID: game.storeID,
+        dealID: game.dealID,
+        salePrice: game.salePrice,
+        normalPrice: game.normalPrice,
+        steamRatingText: game.steamRatingText,
+        steamRatingPercent: game.steamRatingPercent,
+        steamRatingCount: game.steamRatingCount,
+        metacriticScore: game.metacriticScore,
+        store: game.store,
+        savedAt: new Date(),
+      });
+      setIsGameSaved(true);
     } catch (error) {
-      setError(error.message || "Failed to update favorites");
+      setError(error.message);
     } finally {
       setIsProcessing(false);
     }
@@ -83,7 +79,7 @@ export default function GameCard({ game }) {
         <button onClick={handleFavoriteToggle} disabled={isProcessing}>
           {isProcessing
             ? "Processing..."
-            : isSavedGame
+            : isGameSaved
             ? "♥ Remove Favorite"
             : "♡ Add Favorite"}
         </button>

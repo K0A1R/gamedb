@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import GameCard from "../components/game-card";
 import useStores from "../../_hooks/useStores";
 import { useUserAuth } from "../../_utils/auth-context";
-import { isSaved } from "../../_services/games-services";
 
 export default function Page() {
   const [gamesUnderTwenty, setGamesUnderTwenty] = useState([]);
@@ -20,19 +19,7 @@ export default function Page() {
         );
         if (!response.ok) throw new Error("Failed to fetch games under 20$");
         const data = await response.json();
-
-        // Add saved status if user is logged in
-        if (user) {
-          const gamesWithStatus = await Promise.all(
-            data.map(async (game) => ({
-              ...game,
-              isSaved: await isSaved(user.uid, game.gameID),
-            }))
-          );
-          setGamesUnderTwenty(gamesWithStatus);
-        } else {
-          setGamesUnderTwenty(data);
-        }
+        setGamesUnderTwenty(data);
       } catch (error) {
         setError(error.message);
       } finally {
@@ -66,7 +53,7 @@ export default function Page() {
       <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
         {gamesUnderTwenty.map((game) => (
           <GameCard
-            key={`${game.gameID}-${game.dealID}`}
+            key={game.dealID}
             game={{
               gameID: game.gameID,
               name: game.title,
@@ -80,7 +67,6 @@ export default function Page() {
               steamRatingCount: game.steamRatingCount,
               metacriticScore: game.metacriticScore,
               store: getStoreName(game.storeID),
-              isSaved: game.isSaved || false,
             }}
           />
         ))}
