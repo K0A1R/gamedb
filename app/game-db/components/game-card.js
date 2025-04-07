@@ -131,8 +131,8 @@ export default function GameCard({ game }) {
           {isProcessing
             ? "Processing..."
             : isGameSaved
-            ? "♥ Remove Favorite"
-            : "♡ Add Favorite"}
+            ? "♥ Stop Watching"
+            : "♡ Start Watching"}
         </button>
       )}
 

@@ -36,14 +36,17 @@ export default function Page() {
 
   if (!user) {
     return (
-      <div className="flex flex-col items-center text-gray-200">
-        <h1 className="text-6xl mb-5">Welcome to GameDB</h1>
-        <h2 className="text-xl">Please Sign In to Continue</h2>
+      <div className="flex flex-col items-center justify-center min-h-[60vh] text-gray-200">
+        <h1 className="text-4xl md:text-6xl mb-5">Welcome to GameDB</h1>
+        <h2 className="text-lg md:text-xl">
+          Please sign in to view your favorites
+        </h2>
       </div>
     );
   }
 
-  if (loading || storesLoading) return <p>Loading games...</p>;
+  if (loading || storesLoading)
+    return <p className="animate-pulse">Loading...</p>;
   if (error) return <p>Error loading games: {error}</p>;
   if (storesError) return <p>Error loading stores: {storesError}</p>;
 

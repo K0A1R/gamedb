@@ -9,7 +9,7 @@ import {
   where,
 } from "firebase/firestore";
 
-// find Firestore document ID by gameID & storeID
+// find Firestore document ID by gameId & storeId
 async function findGameDocId(userId, gameId, storeId) {
   const gamesRef = collection(db, "users", userId, "games");
   const q = query(
