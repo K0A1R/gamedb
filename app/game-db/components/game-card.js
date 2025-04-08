@@ -63,8 +63,16 @@ export default function GameCard({ game }) {
             </p>
           )}
           {/*Store Name*/}
-          <p className="font-medium">
-            Store: <span className="text-blue-300">{game.store}</span>
+          <p>
+            Store:{" "}
+            <a
+              href={`https://www.cheapshark.com/redirect?dealID=${game.dealID}`}
+              className="text-blue-300 hover:text-blue-500 font-semibold inline-flex items-center gap-1"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Go To <span>{game.store}</span>
+            </a>
           </p>
         </div>
       </div>

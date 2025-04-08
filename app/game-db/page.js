@@ -51,8 +51,7 @@ export default function Home() {
     steamRatingPercent: null, // Not available in API search results
     steamRatingCount: null, // Not available in API search results
     metacriticScore: null, // Not available in API search results
-    store: "Various Stores", // Not available in API search results
-    cheapestDealID: game.cheapestDealID,
+    store: "Store", // Not available in API search results
   }));
 
   if (!user) {

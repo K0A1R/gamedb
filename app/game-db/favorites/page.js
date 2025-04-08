@@ -54,7 +54,7 @@ export default function Page() {
   if (error) return <p>Error loading favorite games: {error}</p>;
 
   return (
-    <div>
+    <div className="max-w-7xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">Games you are watching</h1>
       {favoriteGames.length === 0 ? (
         <p className="text-gray-200">No favorite games found.</p>
