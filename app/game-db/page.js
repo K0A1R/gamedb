@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useUserAuth } from "../_utils/auth-context";
+import GameCard from "./components/game-card";
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -37,6 +38,23 @@ export default function Home() {
     }
   };
 
+  // Map search results to GameCard compatible format
+  const mappedResults = searchResults.map((game) => ({
+    gameID: game.gameID,
+    name: game.external,
+    gameIMG: game.thumb,
+    storeID: null, // Not available in API search results
+    dealID: game.cheapestDealID,
+    salePrice: game.cheapest,
+    normalPrice: null, // Not available in API search results
+    steamRatingText: null, // Not available in API search results
+    steamRatingPercent: null, // Not available in API search results
+    steamRatingCount: null, // Not available in API search results
+    metacriticScore: null, // Not available in API search results
+    store: "Various Stores", // Not available in API search results
+    cheapestDealID: game.cheapestDealID,
+  }));
+
   if (!user) {
     return (
       <div className="flex flex-col items-center text-gray-200">
@@ -50,6 +68,7 @@ export default function Home() {
     <div className="p-4 bg-gray-900">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-2xl font-bold mb-6">Games Lookup</h1>
+        {/* Search form */}
         <form onSubmit={handleSearch} className="mb-8">
           <div className="flex gap-2">
             <input
@@ -79,52 +98,19 @@ export default function Home() {
         {error && (
           <div className="bg-red-600 p-4 rounded mb-4">Error: {error}</div>
         )}
-
+        {/* Show message if no results found */}
         {hasSearched && searchResults.length === 0 && !loading && (
           <p className="text-gray-300">
             No games found. Try a different search term.
           </p>
         )}
-
-        {searchResults.length > 0 && (
+        {/* Loop through search results */}
+        {mappedResults.length > 0 && (
           <div>
             <h2 className="text-xl font-semibold mb-4">Search Results</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {searchResults.map((game) => (
-                <div
-                  key={game.gameID}
-                  className="bg-gray-800 rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
-                >
-                  <img
-                    src={game.thumb}
-                    alt={game.external}
-                    className="w-full h-48 object-cover"
-                  />
-                  <div className="p-4">
-                    <h3 className="font-bold text-lg mb-2">{game.external}</h3>
-                    <p className="text-gray-300 mb-1">
-                      Cheapest Price:{" "}
-                      <span className="font-semibold text-red-500">
-                        ${game.cheapest}
-                      </span>
-                    </p>
-                    <a
-                      href={`https://www.cheapshark.com/redirect?dealID=${game.cheapestDealID}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <p className="text-sm text-gray-400 font-semibold hover:text-blue-400 hover:underline">
-                        {game.cheapestDealID
-                          ? `Go to deal`
-                          : `No current deals`}
-                      </p>
-                    </a>
-                    {/* Favorite Button */}
-                    <button className="hover:cursor-pointer">
-                      {game.isSaved ? "♥ Unfavorite" : "♡ Favorite"}
-                    </button>
-                  </div>
-                </div>
+              {mappedResults.map((game) => (
+                <GameCard key={game.gameID} game={game} />
               ))}
             </div>
           </div>
