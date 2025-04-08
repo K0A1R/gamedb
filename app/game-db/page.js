@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useUserAuth } from "../_utils/auth-context";
 import GameCard from "./components/game-card";
+import StoreFronts from "./components/store-fronts";
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -103,6 +104,7 @@ export default function Home() {
             No games found. Try a different search term.
           </p>
         )}
+        <StoreFronts />
         {/* Loop through search results */}
         {mappedResults.length > 0 && (
           <div>
