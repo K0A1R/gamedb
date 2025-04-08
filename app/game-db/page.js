@@ -104,8 +104,11 @@ export default function Home() {
             No games found. Try a different search term.
           </p>
         )}
-        <StoreFronts />
-        {/* Loop through search results */}
+
+        {/* Show <StoreFronts> if no search */}
+        {searchResults.length === 0 && <StoreFronts />}
+
+        {/* Loop through search results if search */}
         {mappedResults.length > 0 && (
           <div>
             <h2 className="text-xl font-semibold mb-4">Search Results</h2>
