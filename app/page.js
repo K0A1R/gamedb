@@ -1,103 +1,97 @@
 "use client";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useUserAuth } from "./_utils/auth-context";
 
 export default function Page() {
-  const { user, gitHubSignIn, firebaseSignOut } = useUserAuth();
+  const { user, gitHubSignIn } = useUserAuth();
   const router = useRouter();
+
+  // Auto-redirect if user is already logged in
+  useEffect(() => {
+    if (user) {
+      router.push("../game-db");
+    }
+  }, [user]);
 
   const handleSignInWithGithub = async () => {
     try {
       await gitHubSignIn();
-      router.push("../game-db");
     } catch (error) {
-      console.log("GitHub Sign In Error: ", error);
-    }
-  };
-  const handleSignOut = async () => {
-    try {
-      await firebaseSignOut();
-    } catch (error) {
-      console.log("Sign Out Error: ", error);
+      console.error("GitHub Sign In Error:", error);
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen text-gray-200">
-      <h1 className="text-6xl mb-5">
+    <div className="flex flex-col items-center justify-center min-h-screen text-gray-200 bg-gray-900 p-4">
+      <h1 className="text-6xl mb-5 text-center">
         Welcome to GameDB – Your Ultimate Game Deals Tracker! 🎮💰
       </h1>
-      <h2 className="text-xl mb-5">
+
+      <h2 className="text-xl mb-5 text-center">
         Tired of scouring multiple stores for the best deals on games? GameDB
         makes it easy!
       </h2>
-      <p>
-        🔍 Discover the Hottest Discounts – Browse the cheapest deals from
-        Steam, GOG, and Epic Games in one place.
-      </p>
-      <p>
-        💰 Games Under $20 – Find wallet-friendly gems without breaking the
-        bank.
-      </p>
-      <p>
-        ❤️ Save Your Favorites – Log in, watch/favorite deals, and track them in
-        your personal list—saved directly to your account.
-      </p>
-      <p>
-        ⚡ Fast & Simple – Powered by CheapShark API, GameDB delivers real-time
-        price comparisons so you never overpay.
-      </p>
-      <p className="font-bold">
-        👉 Log in to start tracking games or continue without logging in and
-        start exploring now. Never miss a deal again with GameDB!
-      </p>
-      <div className="flex flex-col items-center mt-5">
-        {user ? (
-          <>
-            <p className="flex flex-row text-xl">
-              <img
-                src={user.photoURL}
-                alt={user.photoURL}
-                height={30}
-                width={30}
-                className="rounded-full mr-2"
-              />
-              {user.displayName} ({user.email})
-            </p>
-            <button
-              className="mt-3 w-full py-2 rounded font-medium transition-colors bg-blue-600 hover:bg-blue-700 max-w-44"
-              onClick={handleSignOut}
-            >
-              Sign Out of GitHub
-            </button>
-            <button
-              className="mt-3 w-full py-2 rounded font-medium transition-colors bg-blue-600 hover:bg-blue-700 max-w-44"
-              onClick={() => {
-                window.location.href = "../game-db";
-              }}
-            >
-              Continue to GameDB
-            </button>
-          </>
-        ) : (
-          <>
-            <button
-              className="mt-3 w-full py-2 rounded font-medium transition-colors bg-blue-600 hover:bg-blue-700 max-w-44 px-4"
-              onClick={handleSignInWithGithub}
-            >
-              Sign In with GitHub
-            </button>
-            <button
-              className="mt-3 w-full py-2 rounded font-medium transition-colors bg-blue-600 hover:bg-blue-700 max-w-44"
-              onClick={() => {
-                window.location.href = "../game-db";
-              }}
-            >
-              Continue to GameDB
-            </button>
-          </>
-        )}
+
+      <div className="max-w-2xl space-y-3 mb-8">
+        <p className="flex items-start">
+          <span className="mr-2">🔍</span>
+          <span>
+            Discover the Hottest Discounts – Browse the cheapest deals from
+            Steam, GOG, and Epic Games in one place.
+          </span>
+        </p>
+        <p className="flex items-start">
+          <span className="mr-2">💰</span>
+          <span>
+            Games Under $20 – Find wallet-friendly gems without breaking the
+            bank.
+          </span>
+        </p>
+        <p className="flex items-start">
+          <span className="mr-2">❤️</span>
+          <span>
+            Save Your Favorites – Log in, watch/favorite deals, and track them
+            in your personal list.
+          </span>
+        </p>
+        <p className="flex items-start">
+          <span className="mr-2">⚡</span>
+          <span>
+            Fast & Simple – Powered by CheapShark API for real-time price
+            comparisons.
+          </span>
+        </p>
       </div>
+
+      <p className="font-bold text-lg mb-8 text-center">
+        👉 Never miss a deal again with GameDB!
+      </p>
+
+      {/* Sign In & Continue as guest buttons */}
+      {!user && (
+        <div className="flex flex-col items-center gap-4 w-full max-w-xs">
+          <button
+            className="w-full py-3 rounded-lg font-semibold bg-black hover:bg-gray-800 transition-colors px-6"
+            onClick={handleSignInWithGithub}
+          >
+            Sign In with GitHub
+          </button>
+          <button
+            className="w-full py-3 rounded-lg font-semibold bg-gray-700 hover:bg-gray-600 transition-colors px-6"
+            onClick={() => router.push("../game-db")}
+          >
+            Continue as Guest
+          </button>
+        </div>
+      )}
+
+      {/* Loading state */}
+      {user && (
+        <div className="text-center">
+          <p>Redirecting to your dashboard...</p>
+        </div>
+      )}
     </div>
   );
 }
