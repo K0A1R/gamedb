@@ -10,8 +10,8 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [hasSearched, setHasSearched] = useState(false);
-  const { user } = useUserAuth();
 
+  // Search function to fetch games from CheapShark API
   const handleSearch = async (e) => {
     e.preventDefault();
 
@@ -55,15 +55,6 @@ export default function Home() {
     metacriticScore: null,
     store: "Store",
   }));
-
-  // if (!user) {
-  //   return (
-  //     <div className="flex flex-col items-center text-gray-200">
-  //       <h1 className="text-6xl mb-5">Welcome to GameDB</h1>
-  //       <h2 className="text-xl">Please Sign In to Continue</h2>
-  //     </div>
-  //   );
-  // }
 
   return (
     <div className="p-4 bg-gray-900">

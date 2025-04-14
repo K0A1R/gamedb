@@ -9,8 +9,8 @@ export default function Page() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { stores, loading: storesLoading, error: storesError } = useStores();
-  const { user } = useUserAuth();
 
+  // Fetch games under $20 from CheapShark API
   useEffect(() => {
     const fetchGames = async () => {
       try {
@@ -29,21 +29,11 @@ export default function Page() {
     fetchGames();
   }, []);
 
+  // Get store name from storeID
   const getStoreName = (storeID) => {
     const store = stores.find((store) => store.storeID === storeID);
     return store ? store.storeName : "Unknown Store";
   };
-
-  // if (!user) {
-  //   return (
-  //     <div className="flex flex-col items-center justify-center min-h-[60vh] text-gray-200">
-  //       <h1 className="text-4xl md:text-6xl mb-5">Welcome to GameDB</h1>
-  //       <h2 className="text-lg md:text-xl">
-  //         Please sign in to view your favorites
-  //       </h2>
-  //     </div>
-  //   );
-  // }
 
   if (loading || storesLoading)
     return <p className="animate-pulse">Loading...</p>;

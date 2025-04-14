@@ -5,24 +5,11 @@ import { useUserAuth } from "../_utils/auth-context";
 export default function Header() {
   const { user, gitHubSignIn, firebaseSignOut } = useUserAuth();
 
-  const handleSignInWithGithub = async () => {
-    try {
-      await gitHubSignIn();
-    } catch (error) {
-      console.log("GitHub Sign In Error: ", error);
-    }
-  };
-  const handleSignOut = async () => {
-    try {
-      await firebaseSignOut();
-    } catch (error) {
-      console.log("Sign Out Error: ", error);
-    }
-  };
-
   return (
     <header className="flex justify-between items-center bg-gray-900 text-white h-20 rounded-md p-4 shadow-sm">
-      <h1 className="text-2xl font-bold">GameDB</h1>
+      <Link href={"/game-db"} className="text-2xl font-bold">
+        GameDB
+      </Link>
       <nav className="flex gap-2 items-center">
         {user ? (
           <>
@@ -36,15 +23,12 @@ export default function Header() {
             <p>{user.displayName}</p>
 
             <span className="text-gray-400">|</span>
-            <button className="hover:text-blue-300" onClick={handleSignOut}>
+            <button className="hover:text-blue-300" onClick={firebaseSignOut}>
               Sign Out
             </button>
           </>
         ) : (
-          <button
-            className="hover:text-blue-300"
-            onClick={handleSignInWithGithub}
-          >
+          <button className="hover:text-blue-300" onClick={gitHubSignIn}>
             Sign In with GitHub
           </button>
         )}

@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import GameCard from "../components/game-card";
 
 export default function Page() {
-  const { user } = useUserAuth();
+  const { user, gitHubSignIn } = useUserAuth();
   const [favoriteGames, setFavoriteGames] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -40,10 +40,15 @@ export default function Page() {
   if (!user) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-gray-200">
-        <h1 className="text-4xl md:text-6xl mb-5">Welcome to GameDB</h1>
-        <h2 className="text-lg md:text-xl">
-          Please sign in to view your favorites
+        <h2 className="text-4xl mb-4">
+          Please sign in to view your favorite games
         </h2>
+        <button
+          className="w-48 py-3 px-6 rounded-lg font-semibold bg-black hover:bg-gray-700 transition-colors"
+          onClick={gitHubSignIn}
+        >
+          Sign In with GitHub
+        </button>
       </div>
     );
   }

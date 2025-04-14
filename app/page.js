@@ -14,19 +14,9 @@ export default function Page() {
     }
   }, [user]);
 
-  const handleSignInWithGithub = async () => {
-    try {
-      await gitHubSignIn();
-    } catch (error) {
-      console.error("GitHub Sign In Error:", error);
-    }
-  };
-
   return (
     <div className="flex flex-col items-center justify-center min-h-screen text-gray-200 bg-gray-900 p-4">
-      <h1 className="text-6xl mb-5 text-center">
-        Welcome to GameDB – Your Ultimate Game Deals Tracker! 🎮💰
-      </h1>
+      <h1 className="text-6xl mb-5 text-center">Welcome to GameDB 🎮💰</h1>
 
       <h2 className="text-xl mb-5 text-center">
         Tired of scouring multiple stores for the best deals on games? GameDB
@@ -38,7 +28,7 @@ export default function Page() {
           <span className="mr-2">🔍</span>
           <span>
             Discover the Hottest Discounts – Browse the cheapest deals from
-            Steam, GOG, and Epic Games in one place.
+            Steam, GOG, and Epic Games and more all in one place.
           </span>
         </p>
         <p className="flex items-start">
@@ -52,7 +42,7 @@ export default function Page() {
           <span className="mr-2">❤️</span>
           <span>
             Save Your Favorites – Log in, watch/favorite deals, and track them
-            in your personal list.
+            in your account.
           </span>
         </p>
         <p className="flex items-start">
@@ -72,13 +62,13 @@ export default function Page() {
       {!user && (
         <div className="flex flex-col items-center gap-4 w-full max-w-xs">
           <button
-            className="w-full py-3 rounded-lg font-semibold bg-black hover:bg-gray-800 transition-colors px-6"
-            onClick={handleSignInWithGithub}
+            className="w-full py-3 px-6 rounded-lg font-semibold bg-black hover:bg-gray-700 transition-colors"
+            onClick={gitHubSignIn}
           >
             Sign In with GitHub
           </button>
           <button
-            className="w-full py-3 rounded-lg font-semibold bg-gray-700 hover:bg-gray-600 transition-colors px-6"
+            className="w-full py-3 px-6 rounded-lg font-semibold bg-gray-700 hover:bg-gray-600 transition-colors"
             onClick={() => router.push("../game-db")}
           >
             Continue as Guest

@@ -3,7 +3,7 @@ import useFavorites from "../../_hooks/useFavorites";
 import { useUserAuth } from "../../_utils/auth-context";
 
 export default function GameCard({ game }) {
-  const { user } = useUserAuth();
+  const { user, gitHubSignIn } = useUserAuth();
   const { isGameSaved, isProcessing, error, handleFavoriteToggle } =
     useFavorites(game);
 
@@ -94,7 +94,10 @@ export default function GameCard({ game }) {
             : "♡ Start Watching"}
         </button>
       ) : (
-        <button className="mt-3 w-full py-2 rounded font-medium transition-colors bg-blue-600 hover:bg-blue-700">
+        <button
+          className="mt-3 w-full py-2 rounded font-medium transition-colors bg-blue-600 hover:bg-blue-700"
+          onClick={gitHubSignIn}
+        >
           Sign In To Watch Games
         </button>
       )}

@@ -33,7 +33,7 @@ export default function StoreFronts() {
         if (!steamRes.ok || !gogRes.ok || !epicRes.ok) {
           throw new Error("Failed to fetch store data");
         }
-
+        // Parse the JSON responses
         const [steamData, gogData, epicData] = await Promise.all([
           steamRes.json(),
           gogRes.json(),

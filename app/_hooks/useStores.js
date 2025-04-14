@@ -6,6 +6,7 @@ export default function useStores() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Fetch stores from the CheapShark API
   useEffect(() => {
     const fetchStores = async () => {
       try {
