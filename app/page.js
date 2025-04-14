@@ -28,7 +28,7 @@ export default function Page() {
           <span className="mr-2">🔍</span>
           <span>
             Discover the Hottest Discounts – Browse the cheapest deals from
-            Steam, GOG, and Epic Games and more all in one place.
+            Steam, GOG, Epic Games and more, all in one place.
           </span>
         </p>
         <p className="flex items-start">
