@@ -41,7 +41,7 @@ export default function Page() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-gray-200">
         <h2 className="text-4xl mb-4">
-          Please sign in to view your favorite games
+          Please sign in to view the games you are watching
         </h2>
         <button
           className="w-48 py-3 px-6 rounded-lg font-semibold bg-black hover:bg-gray-700 transition-colors"
