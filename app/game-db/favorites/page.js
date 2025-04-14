@@ -16,7 +16,7 @@ export default function Page() {
       setLoading(false);
       return;
     }
-    // Set up real-time listener
+    // Real time listener
     const gamesRef = collection(db, "users", user.uid, "games");
     const unsubscribe = onSnapshot(
       gamesRef,
@@ -34,7 +34,6 @@ export default function Page() {
         setLoading(false);
       }
     );
-    // Clean up listener on unmount
     return () => unsubscribe();
   }, [user]);
 

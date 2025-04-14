@@ -77,7 +77,7 @@ export default function GameCard({ game }) {
         </div>
       </div>
       {/*Favorite Button*/}
-      {user && (
+      {user ? (
         <button
           onClick={handleFavoriteToggle}
           disabled={isProcessing}
@@ -92,6 +92,10 @@ export default function GameCard({ game }) {
             : isGameSaved
             ? "♥ Stop Watching"
             : "♡ Start Watching"}
+        </button>
+      ) : (
+        <button className="mt-3 w-full py-2 rounded font-medium transition-colors bg-blue-600 hover:bg-blue-700">
+          Sign In To Watch Games
         </button>
       )}
 

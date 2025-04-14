@@ -41,11 +41,11 @@ export async function getGames(userId) {
 export async function addGame(userId, game) {
   try {
     const gamesRef = collection(db, "users", userId, "games");
-    const docRef = await addDoc(gamesRef, {
+    const snapshot = await addDoc(gamesRef, {
       ...game,
       savedAt: new Date(),
     });
-    return docRef.id;
+    return snapshot.id;
   } catch (error) {
     console.error("Error adding game:", error);
     throw error;

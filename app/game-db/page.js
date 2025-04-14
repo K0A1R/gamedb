@@ -40,29 +40,30 @@ export default function Home() {
   };
 
   // Map search results to GameCard compatible format
+  // Note: Some properties are not available in the API search results and are set to null
   const mappedResults = searchResults.map((game) => ({
     gameID: game.gameID,
     name: game.external,
     gameIMG: game.thumb,
-    storeID: null, // Not available in API search results
+    storeID: null,
     dealID: game.cheapestDealID,
     salePrice: game.cheapest,
-    normalPrice: null, // Not available in API search results
-    steamRatingText: null, // Not available in API search results
-    steamRatingPercent: null, // Not available in API search results
-    steamRatingCount: null, // Not available in API search results
-    metacriticScore: null, // Not available in API search results
-    store: "Store", // Not available in API search results
+    normalPrice: null,
+    steamRatingText: null,
+    steamRatingPercent: null,
+    steamRatingCount: null,
+    metacriticScore: null,
+    store: "Store",
   }));
 
-  if (!user) {
-    return (
-      <div className="flex flex-col items-center text-gray-200">
-        <h1 className="text-6xl mb-5">Welcome to GameDB</h1>
-        <h2 className="text-xl">Please Sign In to Continue</h2>
-      </div>
-    );
-  }
+  // if (!user) {
+  //   return (
+  //     <div className="flex flex-col items-center text-gray-200">
+  //       <h1 className="text-6xl mb-5">Welcome to GameDB</h1>
+  //       <h2 className="text-xl">Please Sign In to Continue</h2>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="p-4 bg-gray-900">

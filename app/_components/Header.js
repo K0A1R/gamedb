@@ -34,21 +34,7 @@ export default function Header() {
               className="rounded-full"
             />
             <p>{user.displayName}</p>
-            <span className="text-gray-400">|</span>
-            <Link href="/game-db" className="hover:text-blue-300">
-              Home
-            </Link>
-            <span className="text-gray-400">|</span>
-            <Link
-              href="/game-db/games-under-twenty"
-              className="hover:text-blue-300"
-            >
-              Under $20
-            </Link>
-            <span className="text-gray-400">|</span>
-            <Link href="/game-db/favorites" className="hover:text-blue-300">
-              Watching
-            </Link>
+
             <span className="text-gray-400">|</span>
             <button className="hover:text-blue-300" onClick={handleSignOut}>
               Sign Out
@@ -62,6 +48,21 @@ export default function Header() {
             Sign In with GitHub
           </button>
         )}
+        <span className="text-gray-400">|</span>
+        <Link href="/game-db" className="hover:text-blue-300">
+          Home
+        </Link>
+        <span className="text-gray-400">|</span>
+        <Link
+          href="/game-db/games-under-twenty"
+          className="hover:text-blue-300"
+        >
+          Under $20
+        </Link>
+        <span className="text-gray-400">|</span>
+        <Link href="/game-db/favorites" className="hover:text-blue-300">
+          Watching
+        </Link>
       </nav>
     </header>
   );

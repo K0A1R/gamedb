@@ -34,16 +34,16 @@ export default function Page() {
     return store ? store.storeName : "Unknown Store";
   };
 
-  if (!user) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] text-gray-200">
-        <h1 className="text-4xl md:text-6xl mb-5">Welcome to GameDB</h1>
-        <h2 className="text-lg md:text-xl">
-          Please sign in to view your favorites
-        </h2>
-      </div>
-    );
-  }
+  // if (!user) {
+  //   return (
+  //     <div className="flex flex-col items-center justify-center min-h-[60vh] text-gray-200">
+  //       <h1 className="text-4xl md:text-6xl mb-5">Welcome to GameDB</h1>
+  //       <h2 className="text-lg md:text-xl">
+  //         Please sign in to view your favorites
+  //       </h2>
+  //     </div>
+  //   );
+  // }
 
   if (loading || storesLoading)
     return <p className="animate-pulse">Loading...</p>;
