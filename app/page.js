@@ -61,6 +61,7 @@ export default function Page() {
       {/* Sign In & Continue as guest buttons */}
       {!user && (
         <div className="flex flex-col items-center gap-4 w-full max-w-xs">
+          {/* GitHub Button */}
           <button
             className="w-full py-3 px-6 rounded-lg font-semibold bg-gray-800 hover:bg-gray-700 transition-colors flex items-center justify-center gap-2 text-white"
             onClick={gitHubSignIn}
@@ -74,6 +75,8 @@ export default function Page() {
             </svg>
             Sign In with GitHub
           </button>
+
+          {/* Google Button */}
           <button
             className="w-full py-3 px-6 rounded-lg font-semibold bg-white hover:bg-gray-300 text-black transition-colors flex items-center justify-center gap-2"
             onClick={googleSignIn}
@@ -98,6 +101,8 @@ export default function Page() {
             </svg>
             Sign In with Google
           </button>
+
+          {/* Guest Button */}
           <button
             className="w-full py-3 px-6 rounded-lg font-semibold bg-gray-700 hover:bg-gray-600 transition-colors"
             onClick={() => router.push("../game-db")}
