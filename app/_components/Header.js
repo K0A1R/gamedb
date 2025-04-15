@@ -3,7 +3,14 @@ import Link from "next/link";
 import { useUserAuth } from "../_utils/auth-context";
 
 export default function Header() {
-  const { user, gitHubSignIn, firebaseSignOut } = useUserAuth();
+  const { user, gitHubSignIn, googleSignIn, firebaseSignOut } = useUserAuth();
+
+  // Function to get the user's profile image
+  const getProfileImage = () => {
+    if (!user) return null;
+    const googlePhoto = user.providerData?.[0]?.photoURL;
+    return googlePhoto || user.photoURL || "default-avatar.png";
+  };
 
   return (
     <header className="flex justify-between items-center bg-gray-900 text-white h-20 rounded-md p-4 shadow-sm">
@@ -11,28 +18,6 @@ export default function Header() {
         GameDB
       </Link>
       <nav className="flex gap-2 items-center">
-        {user ? (
-          <>
-            <img
-              src={user.photoURL}
-              alt={user.photoURL}
-              height={30}
-              width={30}
-              className="rounded-full"
-            />
-            <p>{user.displayName}</p>
-
-            <span className="text-gray-400">|</span>
-            <button className="hover:text-blue-300" onClick={firebaseSignOut}>
-              Sign Out
-            </button>
-          </>
-        ) : (
-          <button className="hover:text-blue-300" onClick={gitHubSignIn}>
-            Sign In with GitHub
-          </button>
-        )}
-        <span className="text-gray-400">|</span>
         <Link href="/game-db" className="hover:text-blue-300">
           Home
         </Link>
@@ -47,6 +32,37 @@ export default function Header() {
         <Link href="/game-db/favorites" className="hover:text-blue-300">
           Watching
         </Link>
+        <span className="text-gray-400">|</span>
+        {user ? (
+          <>
+            <img
+              src={getProfileImage()}
+              alt="User Profile"
+              height={30}
+              width={30}
+              className="rounded-full"
+              onError={(e) => {
+                e.target.src = "/default-avatar.png";
+              }}
+            />
+            <p>{user.displayName}</p>
+
+            <span className="text-gray-400">|</span>
+            <button className="hover:text-blue-300" onClick={firebaseSignOut}>
+              Sign Out
+            </button>
+          </>
+        ) : (
+          <>
+            <button className="hover:text-blue-300" onClick={gitHubSignIn}>
+              Sign In with GitHub
+            </button>
+            <span className="text-gray-400">|</span>
+            <button className="hover:text-blue-300" onClick={googleSignIn}>
+              Sign In with Google
+            </button>
+          </>
+        )}
       </nav>
     </header>
   );
