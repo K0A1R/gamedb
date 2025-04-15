@@ -57,7 +57,7 @@ export default function Page() {
           Sign In with GitHub
         </button>
         <button
-          className="w-60 py-3 px-6 rounded-lg font-semibold bg-white hover:bg-gray-300 transition-colors text-black flex items-center justify-center gap-2"
+          className="w-60 py-3 px-6 rounded-lg font-semibold bg-white hover:bg-gray-400 transition-colors text-black flex items-center justify-center gap-2"
           onClick={googleSignIn}
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">

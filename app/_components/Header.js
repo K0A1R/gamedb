@@ -22,18 +22,21 @@ export default function Header() {
           GameDB
         </Link>
         <nav className="flex gap-2 items-center">
-          <Link href="/game-db" className="hover:text-blue-300">
+          <Link href="/game-db" className="hover:text-blue-300 font-medium">
             Home
           </Link>
           <span className="text-gray-400">|</span>
           <Link
             href="/game-db/games-under-twenty"
-            className="hover:text-blue-300"
+            className="hover:text-blue-300 font-medium"
           >
             Under $20
           </Link>
           <span className="text-gray-400">|</span>
-          <Link href="/game-db/favorites" className="hover:text-blue-300">
+          <Link
+            href="/game-db/favorites"
+            className="hover:text-blue-300 font-medium"
+          >
             Watching
           </Link>
           <span className="text-gray-400">|</span>
@@ -49,17 +52,20 @@ export default function Header() {
                   e.target.src = "/default-avatar.png";
                 }}
               />
-              <p>{user.displayName}</p>
+              <p className="font-medium">{user.displayName}</p>
 
               <span className="text-gray-400">|</span>
-              <button className="hover:text-blue-300" onClick={firebaseSignOut}>
+              <button
+                className="hover:text-blue-300 font-medium"
+                onClick={firebaseSignOut}
+              >
                 Sign Out
               </button>
             </>
           ) : (
             <>
               <button
-                className="hover:text-blue-300"
+                className="hover:text-blue-300 font-medium"
                 onClick={() => setShowAuthModal(true)}
               >
                 Sign In

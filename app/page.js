@@ -78,7 +78,7 @@ export default function Page() {
 
           {/* Google Button */}
           <button
-            className="w-full py-3 px-6 rounded-lg font-semibold bg-white hover:bg-gray-300 text-black transition-colors flex items-center justify-center gap-2"
+            className="w-full py-3 px-6 rounded-lg font-semibold bg-white hover:bg-gray-400 text-black transition-colors flex items-center justify-center gap-2"
             onClick={googleSignIn}
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">

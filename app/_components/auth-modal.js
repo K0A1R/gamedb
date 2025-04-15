@@ -6,6 +6,7 @@ export default function AuthModal({ isOpen, onClose }) {
 
   if (!isOpen) return null;
 
+  // Function to handle EITHER GitHub OR Google authentication
   const handleAuth = async (authFunction) => {
     try {
       await authFunction();
@@ -43,7 +44,7 @@ export default function AuthModal({ isOpen, onClose }) {
 
           {/* Google Button */}
           <button
-            className="w-full py-3 px-6 rounded-lg font-semibold bg-white hover:bg-gray-300 text-black transition-colors flex items-center justify-center gap-2"
+            className="w-full py-3 px-6 rounded-lg font-semibold bg-white hover:bg-gray-400 text-black transition-colors flex items-center justify-center gap-2"
             onClick={() => handleAuth(googleSignIn)}
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">

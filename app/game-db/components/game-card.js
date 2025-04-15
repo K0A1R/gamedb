@@ -1,11 +1,14 @@
 "use client";
+import { useState } from "react";
 import useFavorites from "../../_hooks/useFavorites";
 import { useUserAuth } from "../../_utils/auth-context";
+import AuthModal from "../../_components/auth-modal";
 
 export default function GameCard({ game }) {
   const { user, gitHubSignIn } = useUserAuth();
   const { isGameSaved, isProcessing, error, handleFavoriteToggle } =
     useFavorites(game);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   // Calculate savings percentage
   const savingsPercentage = game.normalPrice
@@ -13,7 +16,7 @@ export default function GameCard({ game }) {
     : 0;
 
   return (
-    <div className="border border-gray-600 rounded-lg p-4 bg-slate-700 hover:shadow-lg transition-shadow flex flex-col h-full">
+    <div className="border border-gray-600 rounded-lg p-4 bg-slate-700 transition-shadow flex flex-col h-full">
       <img
         src={game.gameIMG}
         alt={game.name}
@@ -95,12 +98,17 @@ export default function GameCard({ game }) {
         </button>
       ) : (
         <button
-          className="mt-3 w-full py-2 rounded font-medium transition-colors bg-blue-600 hover:bg-blue-700"
-          onClick={gitHubSignIn}
+          className="hover:text-blue-300 mt-3 py-2 font-medium"
+          onClick={() => setShowAuthModal(true)}
         >
           Sign In To Watch Games
         </button>
       )}
+
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+      />
 
       {error && <p className="mt-2 text-red-400 text-sm">{error}</p>}
     </div>
