@@ -2,13 +2,14 @@
 import { useState, useEffect } from "react";
 import GameCard from "../components/game-card";
 import useStores from "../../_hooks/useStores";
-import { useUserAuth } from "../../_utils/auth-context";
 
 export default function Page() {
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { stores, loading: storesLoading, error: storesError } = useStores();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [gamesPerPage] = useState(8);
 
   // Fetch games under $20 from CheapShark API
   useEffect(() => {
@@ -35,6 +36,19 @@ export default function Page() {
     return store ? store.storeName : "Unknown Store";
   };
 
+  // Pagination logic
+  const indexOfLastGame = currentPage * gamesPerPage;
+  const indexOfFirstGame = indexOfLastGame - gamesPerPage;
+  const currentGames = games.slice(indexOfFirstGame, indexOfLastGame);
+
+  // Change page function
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  // Calculate total number of pages
+  const totalPages = Math.ceil(games.length / gamesPerPage);
+
   if (loading || storesLoading)
     return <p className="animate-pulse">Loading...</p>;
   if (error) return <p>Error loading games: {error}</p>;
@@ -44,7 +58,7 @@ export default function Page() {
     <div className="p-4 max-w-7xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">Games Under $20</h1>
       <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {games.map((game) => (
+        {currentGames.map((game) => (
           <GameCard
             key={`${game.gameID + game.storeID}`}
             game={{
@@ -64,6 +78,49 @@ export default function Page() {
           />
         ))}
       </div>
+      {/* Pagination controls */}
+      {totalPages > 1 && (
+        <div className="flex justify-center mt-8 gap-2">
+          <button
+            onClick={() =>
+              handlePageChange(currentPage > 1 ? currentPage - 1 : 1)
+            }
+            disabled={currentPage === 1}
+            className="px-4 py-2 rounded bg-gray-700 disabled:opacity-50"
+          >
+            Previous
+          </button>
+
+          {/* Page numbers */}
+          {Array.from({ length: totalPages }, (_, index) => index + 1).map(
+            (number) => (
+              <button
+                key={number}
+                onClick={() => handlePageChange(number)}
+                className={`px-4 py-2 rounded ${
+                  currentPage === number
+                    ? "bg-blue-600"
+                    : "bg-gray-700 hover:bg-gray-600"
+                }`}
+              >
+                {number}
+              </button>
+            )
+          )}
+
+          <button
+            onClick={() =>
+              handlePageChange(
+                currentPage < totalPages ? currentPage + 1 : totalPages
+              )
+            }
+            disabled={currentPage === totalPages}
+            className="px-4 py-2 rounded bg-gray-700 disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 }

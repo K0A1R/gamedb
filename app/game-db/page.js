@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import { useUserAuth } from "../_utils/auth-context";
 import GameCard from "./components/game-card";
 import StoreFronts from "./components/store-fronts";
 
@@ -10,11 +9,13 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [hasSearched, setHasSearched] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [gamesPerPage] = useState(6);
 
   // Search function to fetch games from CheapShark API
   const handleSearch = async (e) => {
     e.preventDefault();
-
+    setCurrentPage(1);
     setLoading(true);
     setError(null);
 
@@ -40,7 +41,6 @@ export default function Home() {
   };
 
   // Map search results to GameCard compatible format
-  // Note: Some properties are not available in the API search results and are set to null
   const mappedResults = searchResults.map((game) => ({
     gameID: game.gameID,
     name: game.external,
@@ -55,6 +55,19 @@ export default function Home() {
     metacriticScore: null,
     store: "Store",
   }));
+
+  // Get games for page
+  const indexOfLastGame = currentPage * gamesPerPage;
+  const indexOfFirstGame = indexOfLastGame - gamesPerPage;
+  const currentGames = mappedResults.slice(indexOfFirstGame, indexOfLastGame);
+
+  // Change page function
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  // Calculate total number of pages
+  const totalPages = Math.ceil(mappedResults.length / gamesPerPage);
 
   return (
     <div className="p-4 bg-gray-900">
@@ -90,6 +103,7 @@ export default function Home() {
         {error && (
           <div className="bg-red-600 p-4 rounded mb-4">Error: {error}</div>
         )}
+
         {/* Show message if no results found */}
         {hasSearched && searchResults.length === 0 && !loading && (
           <p className="text-gray-300">
@@ -100,15 +114,60 @@ export default function Home() {
         {/* Show <StoreFronts> if no search */}
         {searchResults.length === 0 && <StoreFronts />}
 
-        {/* Loop through search results if search */}
+        {/* Loop through search results */}
         {mappedResults.length > 0 && (
           <div>
             <h2 className="text-xl font-semibold mb-4">Search Results</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {mappedResults.map((game) => (
+              {currentGames.map((game) => (
                 <GameCard key={game.gameID} game={game} />
               ))}
             </div>
+
+            {/* Pagination controls */}
+            {totalPages > 1 && (
+              <div className="flex justify-center mt-8 gap-2">
+                <button
+                  onClick={() =>
+                    handlePageChange(currentPage > 1 ? currentPage - 1 : 1)
+                  }
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 rounded bg-gray-700 disabled:opacity-50"
+                >
+                  Previous
+                </button>
+
+                {/* Page numbers */}
+                {Array.from(
+                  { length: totalPages },
+                  (_, index) => index + 1
+                ).map((number) => (
+                  <button
+                    key={number}
+                    onClick={() => handlePageChange(number)}
+                    className={`px-4 py-2 rounded ${
+                      currentPage === number
+                        ? "bg-blue-600"
+                        : "bg-gray-700 hover:bg-gray-600"
+                    }`}
+                  >
+                    {number}
+                  </button>
+                ))}
+
+                <button
+                  onClick={() =>
+                    handlePageChange(
+                      currentPage < totalPages ? currentPage + 1 : totalPages
+                    )
+                  }
+                  disabled={currentPage === totalPages}
+                  className="px-4 py-2 rounded bg-gray-700 disabled:opacity-50"
+                >
+                  Next
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>
