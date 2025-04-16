@@ -15,6 +15,7 @@ const AuthContext = createContext();
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
+  // Function to sign in with GitHub
   const gitHubSignIn = async () => {
     try {
       const provider = new GithubAuthProvider();
@@ -24,6 +25,7 @@ export const AuthContextProvider = ({ children }) => {
     }
   };
 
+  // Function to sign in with Google
   const googleSignIn = async () => {
     try {
       const provider = new GoogleAuthProvider();
@@ -33,6 +35,7 @@ export const AuthContextProvider = ({ children }) => {
     }
   };
 
+  // Function to sign out out of Firebase
   const firebaseSignOut = async () => {
     try {
       await signOut(auth);
@@ -41,6 +44,7 @@ export const AuthContextProvider = ({ children }) => {
     }
   };
 
+  // Listen for authentication state changes
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
