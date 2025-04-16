@@ -12,7 +12,7 @@ export default function Header() {
   const getProfileImage = () => {
     if (!user) return null;
     const googlePhoto = user.providerData?.[0]?.photoURL;
-    return googlePhoto || user.photoURL || "default-avatar.png";
+    return googlePhoto || user.photoURL || null;
   };
 
   return (
@@ -48,9 +48,6 @@ export default function Header() {
                 height={30}
                 width={30}
                 className="rounded-full"
-                onError={(e) => {
-                  e.target.src = "/default-avatar.png";
-                }}
               />
               <p className="font-medium">{user.displayName}</p>
 
