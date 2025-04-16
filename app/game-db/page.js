@@ -86,7 +86,11 @@ export default function Home() {
             />
             <button
               type="submit"
-              className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-medium disabled:opacity-50 transition-colors"
+              className={`bg-blue-600 px-6 py-3 rounded-lg font-medium transition-colors ${
+                loading || !searchTerm.trim()
+                  ? "opacity-50"
+                  : "hover:bg-blue-700"
+              }`}
               disabled={loading || !searchTerm.trim()}
             >
               {loading ? (
